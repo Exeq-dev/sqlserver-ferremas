@@ -1,0 +1,125 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+{% endblock css %}
+
+{% block contenido %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container d-flex justify-content-center mx-auto align-items-center">
+        <div class="row">
+            <div class="">
+                <h1>ADMINISTRAR PEDIDOS</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<br>
+<div class="container my-5 shadow-lg">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th scope="col">Número de Pedido</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col">Comuna</th>
+                            <th scope="col">Región</th>
+                            <th scope="col">RUN</th>
+                            <th scope="col">Tipo de Entrega</th>
+                            <th scope="col">Comprobante de pago</th>
+                            <th scope="col">Estado Actual</th>
+                            <th scope="col">Cambiar Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-center">
+                        {% for pedido in pedidos %}
+                            <tr>
+                                <td>{{ pedido.numero }}</td>
+                                <td>{{ pedido.fecha|date:"d/m/Y" }}</td>
+                                <td class="cliente">{{ pedido.nombre|default:"N/A"}} {{ pedido.apellido|default:"N/A"}}</td>
+                                <td class="direccion">{{ pedido.direccion|default:"N/A"}}</td>
+                                <td>{{ pedido.comuna.nombreComuna|default:"N/A"}}</td>
+                                <td>{{ pedido.region.nombreRegion|default:"N/A"}}</td>
+                                <td>{{ pedido.run|default:"N/A"}}</td>
+                                <td>{{ pedido.get_tipo_entrega_display|default:"N/A"}}</td>
+                                <td>
+                                    {% if pedido.comprobante_pago %}
+                                        <img src="{{ MEDIA_URL }}{{ pedido.comprobante_pago }}" alt="Comprobante de Pago" width="100px" height="100px" class="img-thumbnail" onclick="mostrarImagen('{{ MEDIA_URL }}{{ pedido.comprobante_pago }}')">
+                                    {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>{{ pedido.estado }}</td>
+                                {% if user.idRol_id == 5 or user.idRol_id == 2 %}
+                                    <td>
+                                        {% if pedido.estado.id != 4 %}
+                                            <form id="form-{{ pedido.numero }}" method="post" action="{% url 'cambiar_estado' pedido.numero %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="pedido_numero" value="{{ pedido.numero }}">
+                                                {{ form.estado }}
+                                                <button type="button" class="btn btn-sm bg-warning border-warning mt-3" onclick="confirmarActualizacion('{{ pedido.numero }}')">Actualizar</button>
+                                            </form>
+                                        {% else %}
+                                            <button type="button" class="btn btn-sm bg-secondary border-secondary mt-3" disabled>Entregado</button>
+                                        {% endif %}
+                                    </td>
+                                {% else %}
+                                    <td>No accesible...</td>
+                                {% endif %}
+
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}
+
+{% block js %}
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/tiny-slider.js' %}"></script>
+<script src="{% static 'core/js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmarActualizacion(numeroPedido) {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "Esta acción actualizará el estado del pedido.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, actualizar!',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('form-' + numeroPedido).submit();
+            }
+        });
+    }
+
+    function mostrarImagen(src) {
+        Swal.fire({
+            imageUrl: src,
+            imageAlt: 'Comprobante de Pago',
+            width: '40%',
+            imageHeight: 'auto',
+            showCloseButton: true,
+            showConfirmButton: false,
+            customClass: {
+                image: 'img-fluid'
+            }
+        });
+    }
+</script>
+{% endblock js %}

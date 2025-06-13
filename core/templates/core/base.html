@@ -1,0 +1,184 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es"> 
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="{% static 'core/images/favicon.ico' %}">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+  <!-- Bootstrap CSS -->
+  <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="{% static 'core/css/tiny-slider.css' %}" rel="stylesheet">
+  <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+
+  <title>Ferremas - Artículos de construcción</title>
+</head>
+
+<body>
+
+  <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'index' %}">
+        <img class="logo1" src="{% static 'core/images/logo-ferremas-sinfondo.png' %}" alt="">
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsFurni">
+        <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+          <li><a class="nav-link" href="{% url 'index' %}">Home</a></li>
+          <li><a class="nav-link" href="{% url 'shop' %}">Tienda</a></li>
+          <li><a class="nav-link" href="{% url 'about' %}">Sobre nosotros</a></li>
+          <li><a class="nav-link" href="{% url 'services' %}">Servicios</a></li>
+          <li><a class="nav-link" href="{% url 'contact' %}">Contáctanos</a></li>
+        </ul>
+        <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="{% static 'core/images/user.svg' %}" alt="User Icon">
+            </a>
+            <ul class="dropdown-menu bg-black" aria-labelledby="navbarDropdown">
+              {% if user.is_authenticated %}
+                	<li><a class="dropdown-item text-white" href="{% url 'perfil_usuario' %}"><i class="fa-solid fa-user"></i> {{ user.pnombre }} {{ user.ap_paterno }}</a></li>
+					{% if user.idRol_id != 1 and user.idRol_id != 3 %}
+                	<li><a class="dropdown-item text-white" href="{% url 'panel_administracion' %}"><i class="fa-solid fa-lock"></i> Administración</a></li>
+                {% endif %}
+				<li><a class="dropdown-item text-white" href="{% url 'mis_pedidos' %}"><i class="fa-solid fa-store"></i> Mis pedidos</a></li>
+                <li><a class="dropdown-item text-white" href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+					<i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+				</a></li>
+				<form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+					{% csrf_token %}
+				</form>
+              {% else %}
+                <li><a class="dropdown-item text-white" href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión</a></li>
+                <li><a class="dropdown-item text-white" href="{% url 'register' %}"><i class="fa-solid fa-cash-register"></i> Registrarse</a></li>
+              {% endif %}
+            </ul>
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'core/images/cart.svg' %}"></a>
+          </li>
+        </ul>
+      </div>
+    </div>      
+  </nav>
+		{% block contenido %}
+
+    
+        {% endblock %}
+		<!-- Start Footer Section -->
+		<footer class="footer-section">
+			<div class="container relative">
+
+				<div class="sofa-img">
+					<img src="{% static 'core/images/martillo-footer.png' %}" alt="Image" class="img-fluid">
+				</div>
+
+				<div class="row">
+					<div class="col-lg-8">
+						<div class="subscription-form">
+							<h3 class="d-flex align-items-center"><span class="me-1"><img src="{% static 'core/images/envelope-outline.svg' %}" alt="Image" class="img-fluid"></span><span>¿Necesitas ayuda?</span></h3>
+							<p>Dejanos tu nombre y tu correo electrónico y te hablaremos a la brevedad.</p>
+							<form action="#" class="row g-3">
+								<div class="col-auto">
+									<input type="text" class="form-control" placeholder="Ingresa tu nombre">
+								</div>
+								<div class="col-auto">
+									<input type="email" class="form-control" placeholder="Ingresa tu correo">
+								</div>
+								<div class="col-auto">
+									<button class="btn btn-primary">
+										<span class="fa fa-paper-plane"></span>
+									</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="row g-5 mb-5">
+					<div class="col-lg-4">
+						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Ferremas<span>.</span></a></div>
+						<p class="mb-4">Tienda de insumos de ferretería y construcción con mucha experiencia en el mercado, entregando confianza y productos de calidad.</p>
+
+						<ul class="list-unstyled custom-social">
+							<li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-twitter"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-instagram"></span></a></li>
+							<li><a href="#"><span class="fa fa-brands fa-linkedin"></span></a></li>
+						</ul>
+					</div>
+
+					<div class="col-lg-8">
+						<div class="row links-wrap">
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Sobre nosotros</a></li>
+									<li><a href="#">Servicios</a></li>
+									<li><a href="#">Contáctanos</a></li>
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Soporte</a></li>
+									<li><a href="#">Conocimientos</a></li>
+									<li><a href="#">Hablar con un ejecutivo</a></li>
+								</ul>
+							</div>
+
+							<div class="col-6 col-sm-6 col-md-3">
+								<ul class="list-unstyled">
+									<li><a href="#">Trabajo</a></li>
+									<li><a href="#">Nuestro equipo</a></li>
+									<li><a href="#">Política privada</a></li>
+								</ul>
+							</div>
+
+
+						</div>
+					</div>
+
+				</div>
+
+				<div class="border-top copyright">
+					<div class="row pt-4">
+						<div class="col-lg-6">
+							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved.
+            </p>
+						</div>
+
+						<div class="col-lg-6 text-center text-lg-end">
+							<ul class="list-unstyled d-inline-flex ms-auto">
+								<li class="me-4"><a href="#">Terminos &amp; Condiciones</a></li>
+								<li><a href="#">Política privada</a></li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</footer>
+		<!-- End Footer Section -->	
+
+        {% block js %}
+		<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+		<script src="{% static 'core/js/tiny-slider.js' %}"></script>
+		<script src="{% static 'core/js/custom.js' %}"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    	<script src="{% static 'core/js/mensajes.js' %}"></script>
+        {% endblock %}
+	</body>
+
+</html>

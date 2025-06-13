@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<!-- Start Hero Section -->
+<div class="hero mb-5">
+    <div class="container text-center">
+        <h1>DETALLE PRODUCTO</h1>
+    </div>
+</div>
+<!-- End Hero Section -->
+<br>
+<div class="container mt-5 mb-5">
+    {% if user.idRol_id == 1 or user.idRol_id == 2 %}
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{% url 'modificar_producto' producto.idProducto %}" class="btn btn-secondary me-2 text-light"><i class="fa-solid fa-pen"></i> Modificar </a>
+        <a href="{% url 'eliminar_producto' producto.idProducto %}" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Eliminar </a>
+    </div>
+    {% endif %}
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <img src="{{ MEDIA_URL }}{{ producto.imagenProducto }}" alt="{{ producto.nombreProducto }}" class="img-fluid w-75 h-auto">
+                </div>
+                <div class="col-md-6">
+                    <h2 class="text-uppercase fw-bold text-black">{{ producto.nombreProducto }}</h2>
+                    <p class="text-muted">{{ producto.descripcionProducto }}</p>
+                    <div class="mt-4">
+                        <p class="h5 text-uppercase">Precio: <span class="badge bg-warning">${{ producto.precioProducto }} / ${{ precio_dolares }}</span></p>
+                        <p class="h5 text-uppercase">Stock: <span class="badge bg-warning">{{ producto.stockProducto }}</span></p>
+                        <p class="h5 text-uppercase">Marca: <span class="badge bg-warning">{{ producto.idMarca }}</span></p>
+                        <p class="h5 text-uppercase">Categoria: <span class="badge bg-warning">{{ producto.idcategoriaProducto }}</span></p>
+                        <div class="mt-5 text-center">
+                            {% if producto.stockProducto > 0 %}
+                                <a href="{% url 'agregar_al_carrito' producto.idProducto %}" class="btn btn-warning text-white font-weight-bold rounded-pill">Añadir al Carrito</a>
+                            {% else %}
+                                <button class="btn btn-dark text-white font-weight-bold rounded-pill" disabled>Añadir al Carrito</button>
+                                <p class="fw-bold text-danger ">*Producto sin stock*</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br><br>
+{% endblock contenido %}
+{% block js %}
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/tiny-slider.js' %}"></script>
+<script src="{% static 'core/js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+{% endblock js %}

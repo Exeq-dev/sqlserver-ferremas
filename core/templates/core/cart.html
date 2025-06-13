@@ -1,0 +1,119 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>CARRITO</h1>
+                </div>
+            </div>
+            <div class="col-lg-7"></div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <div class="row mb-5">
+            <form class="col-md-12" method="post">
+                <div class="site-blocks-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="product-thumbnail">Imágen</th>
+                                <th class="product-name">Producto</th>
+                                <th class="product-price">Precio Unitario</th>
+                                <th class="product-quantity">Cantidad</th>
+                                <th class="product-total">Total</th>
+                                <th class="product-remove">Eliminar</th>
+                            </tr>
+                        </thead>
+                        {% if request.user.is_authenticated and carrito %}
+                        <tbody>
+                            {% for item in carrito.itemcarrito_set.all %}
+                            <tr data-item-id="{{ item.id }}">
+                                <td class="product-thumbnail">
+                                    {% if item.producto.imagenProducto %}
+                                    <img class="img-fluid" src="{{ MEDIA_URL }}productos/{{ item.producto.imagenProducto }}">
+                                    {% else %}
+                                    <img class="img-fluid" src="{% static 'core/images/danger.png' %}">
+                                    {% endif %}
+                                </td>
+                                <td class="product-name">
+                                    <h2 class="h5 text-black">{{ item.producto.nombreProducto }}</h2>
+                                </td>
+                                <td class="product-price">${{ item.producto.precioProducto }}</td>
+                                <td class="product-price">{{ item.cantidad }}</td>
+                                <td class="product-total">${{ item.precio_total }}</td>
+                                <td>
+                                    <a onclick="eliminarProductoCarrito({{ item.id }}); return false;" href="#">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <a class="btn btn-outline-black btn-sm btn-block" href="{% url 'shop' %}">Continuar comprando</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 pl-5">
+                <div class="row justify-content-end">
+                    <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-12 text-right border-bottom mb-5">
+                                <h3 class="text-black h4 text-uppercase">Pago del carrito</h3>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <span class="text-black">Sub total</span>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <strong class="text-black">${{ subtotal }} / USD ${{ subtotal_dolar }}</strong>
+                            </div>
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col-md-6">
+                                <span class="text-black">Total</span>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <strong class="text-black">${{ total }} / USD ${{ total_dolar }}</strong>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="btn btn-black btn-lg py-3 btn-block" href="{% url 'checkout' %}">Ir a pagar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock contenido %}
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/tiny-slider.js' %}"></script>
+<script src="{% static 'core/js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+{% endblock js %}

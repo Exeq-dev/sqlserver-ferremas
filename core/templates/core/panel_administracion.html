@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<div class="hero">
+    <div class="container d-flex justify-content-center mx-auto align-items-center">
+      <div class="row">
+        <div class="">
+          <h1>PANEL DE ADMINISTRACIÓN</h1>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- Inicio panel de administración -->
+<br><br>
+<div class="container mx-auto align-items-center">
+    <!-- Card 1 -->
+    {% if user.idRol_id == 5 %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-lg">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x mb-3"></i>
+                    <h5 class="card-title">Gestión de Usuarios</h5>
+                    <p class="card-text">Administrar usuarios y sus roles.</p>
+                    <a href="{% url 'gestion_usuarios' %}" class="btn btn-primary">Ir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- Card 2 -->
+    {% if user.idRol_id == 5 or user.idRol_id == 2 or user.idRol_id == 4 %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-lg">
+                <div class="card-body text-center">
+                    <i class="fas fa-shopping-cart fa-3x mb-3"></i>
+                    <h5 class="card-title">Gestión de Pedidos</h5>
+                    <p class="card-text">Ver y administrar pedidos de clientes.</p>
+                    <a href="{% url 'administrar_pedidos' %}" class="btn btn-primary">Ir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- Card 3 -->
+    {% if user.idRol_id == 5 or user.idRol_id == 4 %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mb-4 shadow-lg">
+                <div class="card-body text-center">
+                    <i class="fas fa-file fa-3x mb-3"></i>
+                    <h5 class="card-title">Gestión de informes</h5>
+                    <p class="card-text">Administrar informes de la página.</p>
+                    <a href="{% url 'pedidos_entregados' %}" class="btn btn-primary">Ir</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+<br><br><br><br><br>
+<!-- Fin panel de administración -->
+
+{% endblock contenido %}
+{% block js %}
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/tiny-slider.js' %}"></script>
+<script src="{% static 'core/js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+{% endblock %}

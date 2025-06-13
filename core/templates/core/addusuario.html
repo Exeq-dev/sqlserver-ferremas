@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block contenido %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container d-flex justify-content-center mx-auto align-items-center">
+      <div class="row">
+        <div class="">
+          <h1>AÑADIR USUARIO</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- End Hero Section -->
+<div class="container">
+    <div class="row">
+        <div class="col-12 m-5">
+            <form method="post" enctype="multipart/form-data" id="agregarUsuarioForm">
+                {% csrf_token %}
+                {{ form | crispy }}
+                <!-- Campo oculto para almacenar el ID del usuario -->
+                <input type="hidden" name="usuario_id" value="{{ usuario_id }}">
+                <button type="button" class="btn btn-success mt-4" onclick="confirmarAgregarUsuario()">Guardar</button>
+            </form>
+            <br><br><br>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/tiny-slider.js' %}"></script>
+<script src="{% static 'core/js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmarAgregarUsuario() {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Desea añadir el usuario?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, añadir',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('agregarUsuarioForm').submit();
+            }
+        });
+    }
+</script>
+{% endblock %}

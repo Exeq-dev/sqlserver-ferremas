@@ -1,0 +1,170 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+		<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>HERRAMIENTAS Y <span clsas="d-block">MATERIALES </span></h1>
+								<p class="mb-4">Explora y encuentra todo lo necesario para proyecto de construcción.</p>
+								<p><a href="{% url 'shop' %}" class="btn btn-secondary me-2 text-white font-bold">Explorar</a><a href="{% url 'contact' %}" class="btn btn-white-outline">Contactarse</a></p>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="hero-img-wrap">
+								<img src="{% static 'core/images/material-hero.png' %}" class="img-fluid">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+		
+		<!-- Start Product Section -->
+		<div class="product-section">
+			<div class="container">
+				<div class="row">
+
+					<!-- Start Column 1 -->
+					<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+						<h2 class="mb-4 section-title">Herramientas de alta calidad</h2>
+						<p class="mb-4">Contamos con gran cantidad de herramientas como martillos, cierras, palas, etc. </p>
+						<p><a href="{% url 'shop' %}" class="btn">Explorar</a></p>
+					</div> 
+					<!-- End Column 1 -->
+
+					<!-- Start Column 2 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+						<a class="product-item" href="">
+							<img src="{% static 'core/images/martillo-venta.png' %}" class="img-fluid product-thumbnail">
+							<h3 class="product-title">Martillo bola 24 Oz acero</h3>
+						</a>
+					</div> 
+					<!-- End Column 2 -->
+
+					<!-- Start Column 3 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+						<a class="product-item" href="">
+							<img src="{% static 'core/images/alicate-venta.png' %}" class="img-fluid product-thumbnail">
+							<h3 class="product-title">Alicate combinación 7"</h3>
+						</a>
+					</div>
+					<!-- End Column 3 -->
+
+					<!-- Start Column 4 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+						<a class="product-item" href="">
+							<img src="{% static 'core/images/serrucho-venta.png' %}" class="img-fluid product-thumbnail">
+							<h3 class="product-title">Serrucho bimaterial 22"</h3>
+						</a>
+					</div>
+					<!-- End Column 4 -->
+
+				</div>
+			</div>
+		</div>
+		<!-- End Product Section -->
+
+		<!-- Start Why Choose Us Section -->
+		<div class="why-choose-section">
+			<div class="container">
+				<div class="row justify-content-between">
+					<div class="col-lg-6">
+						<h2 class="section-title">¿Por Qué Escogernos?</h2>
+						<p>Somos una empresa con mucha experiencia y presencia en el mercado, por lo cuál brindamos confianza y una buena experiencia de compra.</p>
+
+						<div class="row my-5">
+							<div class="col-6 col-md-6">
+								<div class="feature">
+									<div class="icon">
+										<img src="{% static 'core/images/truck.svg' %}" alt="Image" class="imf-fluid">
+									</div>
+									<h3>Entregas rápidas &amp; gratis</h3>
+									<p>Entregas en 24 horas en la región metropolitana y en 48 horas en regiones.</p>
+								</div>
+							</div>
+
+							<div class="col-6 col-md-6">
+								<div class="feature">
+									<div class="icon">
+										<img src="{% static 'core/images/bag.svg' %}" alt="Image" class="imf-fluid">
+									</div>
+									<h3>Fácil para comprar</h3>
+									<p>Tenemos un sistema confiable para las compras.</p>
+								</div>
+							</div>
+
+							<div class="col-6 col-md-6">
+								<div class="feature">
+									<div class="icon">
+										<img src="{% static 'core/images/support.svg' %}" alt="Image" class="imf-fluid">
+									</div>
+									<h3>Soporte 24/7</h3>
+									<p>Puedes hablar a un ejecutivo para la asistencia al momento.</p>
+								</div>
+							</div>
+
+							<div class="col-6 col-md-6">
+								<div class="feature">
+									<div class="icon">
+										<img src="{% static 'core/images/return.svg' %}" alt="Image" class="imf-fluid">
+									</div>
+									<h3>Devoluciones sin problemas</h3>
+									<p>Si deseas hacer una devolución tan solo hablar a un ejecutivo.</p>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-5">
+						<div class="img-wrap">
+							<img src="{% static 'core/images/why-choose-us-img.jpg' %}" alt="Image" class="img-fluid">
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- End Why Choose Us Section -->
+
+		<!-- Start We Help Section -->
+		<div class="we-help-section">
+			<div class="container">
+				<div class="row justify-content-between">
+					<div class="col-lg-7 mb-5 mb-lg-0">
+						<div class="imgs-grid">
+							<div class="grid grid-1"><img src="{% static 'core/images/img-grid-1.jpg' %}" alt="Untree.co"></div>
+							<div class="grid grid-2"><img src="{% static 'core/images/img-grid-2.jpg' %}" alt="Untree.co"></div>
+							<div class="grid grid-3"><img src="{% static 'core/images/img-grid-3.jpg' %}" alt="Untree.co"></div>
+						</div>
+					</div>
+					<div class="col-lg-5 ps-lg-5">
+						<h2 class="section-title mb-4">Te ayudamos en tu compra.</h2>
+						<p>Puedes contactar a un encargado para que te ayude con tus compras, o si tienes algún problema al momento de comprar.</p>
+
+						<ul class="list-unstyled custom-list my-4">
+							<li>Ayuda en tiempo real.</li>
+							<li>Asistente especialista.</li>
+							<li>Fácil de entender.</li>
+							<li>Buen trato y grata experiencia.</li>
+						</ul>
+						<p><a herf="{% url 'shop' %}" class="btn">Explorar</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- End We Help Section -->
+		{% endblock %}
+		{% block js %}
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-ZB6xrqfMuj1N0xyQcJcGf2ptWqf3vO4lJAsT1LRjCLYjd3OV3AXSv17t1G0/hkZi" crossorigin="anonymous"></script>
+		<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+		<script src="{% static 'core/js/custom.js' %}"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="{% static 'core/js/mensajes.js' %}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js" integrity="sha512-j+F4W//4Pu39at5I8HC8q2l1BNz4OF3ju39HyWeqKQagW6ww3ZF9gFcu8rzUbyTDY7gEo/vqqzGte0UPpo65QQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		{% endblock js %}	

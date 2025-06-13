@@ -1,0 +1,65 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block contenido %}
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>MIS PEDIDOS</h1>
+                </div>
+            </div>
+            <div class="col-lg-7"></div>
+        </div>
+    </div>
+</div>
+<br><br>
+<!-- End Hero Section -->
+<div class="container shadow-lg">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="accordion" id="accordionHistorial">
+                {% for pedido in pedidos %}
+                <div class="card">
+                    <div class="card-header" id="heading{{ pedido.numero }}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ pedido.numero }}" aria-expanded="true" aria-controls="collapse{{ pedido.numero }}">
+                                Número de Pedido: {{ pedido.numero }}
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapse{{ pedido.numero }}" class="collapse" aria-labelledby="heading{{ pedido.numero }}" data-parent="#accordionHistorial">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Fecha de Compra:</strong> {{ pedido.fecha }}</p>
+                                    <p><strong>Cliente:</strong> {{ pedido.carrito.usuario }}</p>
+                                    <p><strong>Cantidad:</strong> {{ pedido.calcular_cantidad }}</p>
+                                    <p><strong>Precio Total:</strong> ${{ pedido.calcular_total }}</p>
+                                    <p><strong>Estado:</strong> {{ pedido.estado.descripcion }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Productos:</h5>
+                                    <ul>
+                                        {% for item in pedido.itempedido_set.all %}
+                                            <li>
+                                                <img src="{{ MEDIA_URL }}productos/{{ item.producto.imagenProducto }}" alt="{{ item.producto.nombreProducto }}" width="50" height="50">
+                                                {{ item.producto.nombreProducto }} - Cantidad: {{ item.cantidad }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<br><br><br>
+{% endblock %}

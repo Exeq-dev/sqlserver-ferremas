@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container d-flex justify-content-center mx-auto align-items-center">
+      <div class="row">
+        <div class="">
+          <h1>GESTIÓN DE USUARIOS</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- End Hero Section -->
+
+<br>
+<div class="container my-5 ">
+    <div class="d-flex mx-auto align-items-end justify-content-end">
+        <p><a href="{% url 'adduser' %}" class="btn btn-secondary me-2 text-white font-bold">CREAR <i class="fa-solid fa-user"></i></a></p>
+    </div>
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Run</th>
+                        <th scope="col">Correo</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Comuna</th>
+                        <th scope="col" class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                        <tr>
+                            <th scope="row">{{ usuario.0 }}</th>
+                            <td>{{ usuario.1 }}</td>
+                            <td>{{ usuario.3 }} {{ usuario.4 }}</td>
+                            <td>{{ usuario.2 }}</td>
+                            <td>{{ usuario.5 }}</td>
+                            <td>{{ usuario.7 }}</td>
+                            <td>{{ usuario.6 }}</td>
+                            <td class="text-center">
+                                <a href="{% url 'modificar_usuario' usuario.0 %}" class="btn btn-warning btn-sm">Modificar</a>
+                                <a onclick="eliminarUsuarioAdmin({{ usuario.0 }})" class="btn btn-danger btn-sm">Eliminar</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br><br><br>
+
+
+{% endblock contenido %}

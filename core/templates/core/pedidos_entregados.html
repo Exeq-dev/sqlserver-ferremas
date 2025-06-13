@@ -1,0 +1,106 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<div class="hero">
+    <div class="container d-flex justify-content-center mx-auto align-items-center">
+        <div class="row">
+            <div class="">
+                <h1>PEDIDOS ENTREGADOS</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="container my-5 shadow-lg">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <form id="filtro-form" method="get" action="{% url 'pedidos_entregados' %}">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="mes" class="form-label">Mes</label>
+                        <select id="mes" name="mes" class="form-control">
+                            <option value="">Seleccionar Mes</option>
+                            {% for m in meses %}
+                                <option value="{{ m }}" {% if selected_mes == m %}selected{% endif %}>{{ m }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="anio" class="form-label">Año</label>
+                        <select id="anio" name="anio" class="form-control">
+                            <option value="">Seleccionar Año</option>
+                            {% for y in years %}
+                                <option value="{{ y }}" {% if selected_anio == y %}selected{% endif %}>{{ y }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+                    </div>
+                </div>
+            </form>
+            <table class="table table-hover">
+                <thead class="table-dark text-center">
+                    <tr>
+                        <th scope="col">Número de Pedido</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Dirección</th>
+                        <th scope="col">Comuna</th>
+                        <th scope="col">Región</th>
+                        <th scope="col">Estado Actual</th>
+                        <th scope="col">Total Pagado</th>
+                    </tr>
+                </thead>
+                <tbody class="flex-wrap text-center h6">
+                    {% for pedido in pedidos %}
+                        <tr>
+                            <td>{{ pedido.numero }}</td>
+                            <td>{{ pedido.fecha|date:"d/m/Y" }}</td>
+                            <td class="cliente small">{{ pedido.nombre }} {{ pedido.apellido }}</td>
+                            <td class="direccion small">{{ pedido.direccion }}</td>
+                            <td class="small">{{ pedido.comuna }}</td>
+                            <td class="small">{{ pedido.region }}</td>
+                            <td class="small">{{ pedido.estado }}</td>
+                            <td class="small">${{ pedido.total_pagado }} CLP</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="text-center mt-3">
+    <a href="{% url 'generar_informes' %}?mes={{ selected_mes }}&anio={{ selected_anio }}" class="btn btn-primary">Descargar Excel</a>
+</div>
+<br><br><br><br><br>
+{% endblock contenido %}
+
+{% block js %}
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/tiny-slider.js' %}"></script>
+<script src="{% static 'core/js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+<script>
+    // Guardar los valores seleccionados antes de enviar el formulario
+    document.getElementById('filtro-form').addEventListener('submit', function() {
+        sessionStorage.setItem('selected_mes', document.getElementById('mes').value);
+        sessionStorage.setItem('selected_anio', document.getElementById('anio').value);
+    });
+
+    // Restaurar los valores seleccionados después de recargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        var selectedMes = sessionStorage.getItem('selected_mes');
+        var selectedAnio = sessionStorage.getItem('selected_anio');
+        if (selectedMes) {
+            document.getElementById('mes').value = selectedMes;
+        }
+        if (selectedAnio) {
+            document.getElementById('anio').value = selectedAnio;
+        }
+    });
+</script>
+{% endblock %}

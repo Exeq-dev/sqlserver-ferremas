@@ -1,0 +1,57 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block contenido %}
+<!-- Start Hero Section -->
+<div class="hero">
+  <div class="container d-flex justify-content-center mx-auto align-items-center">
+    <div class="row">
+      <div class="">
+        <h1>MODIFICAR USUARIO</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Hero Section -->
+<div class="container">
+  <div class="row justify-content-center mt-4 mb-5">
+    <div class="col-md-8">
+      <form method="POST" class="p-4 rounded shadow" id="modificarUsuarioForm">
+        {% csrf_token %}
+        <input type="hidden" name="usuario_id" value="{{ usuario_id }}">
+        <div class="form-group">
+          {{ form | crispy }}
+        </div>
+        <button type="button" class="btn btn-warning mt-3" onclick="confirmarModificarUsuario()">Modificar Usuario</button>
+      </form>
+    </div>
+  </div>
+</div>
+<style>
+  .form-control {
+    height: 50px;
+    border-radius: 20px;
+  }
+</style>
+{% endblock contenido %}
+{% block js %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function confirmarModificarUsuario() {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Desea modificar el usuario?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, modificar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          document.getElementById('modificarUsuarioForm').submit();
+        }
+      });
+    }
+  </script>
+{% endblock js %}

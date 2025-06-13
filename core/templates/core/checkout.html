@@ -1,0 +1,559 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Verificación</h1>
+                </div>
+            </div>
+            <div class="col-lg-7"></div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<div class="untree_co-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 mb-5">
+                <h2 class="h3 mb-3 text-black">Seleccione una opción de entrega</h2>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="tipo_entrega" id="envio_domicilio" value="envio_domicilio" checked>
+                    <label class="form-check-label" for="envio_domicilio">Envío a domicilio</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="tipo_entrega" id="retiro_tienda" value="retiro_tienda">
+                    <label class="form-check-label" for="retiro_tienda">Retiro en tienda</label>
+                </div>
+            </div>
+            <div class="col-md-6 mb-5 mb-md-0" id="form_envio">
+                <h2 class="h3 mb-3 text-black">Detalle del pedido (Envío a domicilio)</h2>
+                <div class="p-3 p-lg-5 border bg-white">
+                    <form id="checkout-form-envio" method="post" class="contact-form">
+                        {% csrf_token %}
+                        <!-- Formulario de envío a domicilio -->
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="id_nombre" class="text-black">Nombre <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="id_nombre" name="nombre" maxlength="100" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_apellido" class="text-black">Apellido <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="id_apellido" name="apellido" maxlength="100" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="id_direccion" class="text-black">Dirección <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="id_direccion" name="direccion" maxlength="255" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="id_region" class="text-black">Región <span class="text-danger">*</span></label>
+                                <select class="form-control" id="id_region" name="region" required>
+                                    <option value="">Seleccionar región</option>
+                                    {% for region in regiones %}
+                                    <option value="{{ region.idRegion }}">{{ region.nombreRegion }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_comuna" class="text-black">Comuna <span class="text-danger">*</span></label>
+                                <select class="form-control" id="id_comuna" name="comuna" required>
+                                    <option value="">Seleccionar comuna</option>
+                                    {% for comuna in comunas %}
+                                    <option value="{{ comuna.idComuna }}">{{ comuna.nombreComuna }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="id_correo" class="text-black">Correo electrónico <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="id_correo" name="correo" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Formulario para Retiro en Tienda -->
+            <div class="col-md-6 mb-5 mb-md-0" id="lista_sucursales" style="display: none;">
+                <h2 class="h3 mb-3 text-black">Lista de sucursales (Retiro en tienda)</h2>
+                <div class="p-3 p-lg-5 border bg-white">
+                    <form id="checkout-form-retiro" method="post" class="contact-form">
+                        {% csrf_token %}
+                        <!-- Formulario de retiro en tienda -->
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="id_nombre_2" class="text-black">Nombre <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="id_nombre_2" name="nombre" maxlength="100" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="id_apellido_2" class="text-black">Apellido <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="id_apellido_2" name="apellido" maxlength="100" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="id_run" class="text-black">Run <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="id_run" name="run" maxlength="20" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="id_correo" class="text-black">Correo electrónico <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="id_correo_2" name="correo" required>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Tabla de sucursales -->
+                    <table class="table" id="sucursal_table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Dirección</th>
+                                <th>Seleccionar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sucursal_table_body">
+                            {% for sucursal in sucursales %}
+                            <tr>
+                                <td>
+                                    <label for="id_Sucursal_{{ sucursal.idSucursal }}">
+                                        {{ sucursal.nombreSucursal }}
+                                    </label>
+                                </td>
+                                <td>{{ sucursal.direccionSucursal }}</td>
+                                <td>
+                                    <input type="radio" name="sucursal" id="id_Sucursal_{{ sucursal.idSucursal }}" value="{{ sucursal.idSucursal }}">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="row mb-5">
+                    <div class="col-md-12">
+                        <h2 class="h3 mb-3 text-black">Tu pedido</h2>
+                        <div class="p-3 p-lg-5 border bg-white">
+                            <table class="table site-block-order-table mb-5">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in items %}
+                                    <tr>
+                                        <td>{{ item.producto.nombreProducto }} <strong class="mx-2">x</strong> {{ item.cantidad }}</td>
+                                        <td>${{ item.precio_total }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td class="text-black font-weight-bold"><strong>Total de pedido</strong></td>
+                                        <td class="text-black font-weight-bold"><strong>${{ total }} / USD ${{total_dolar}}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <form id="checkoutForm" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="paymentMethod">Método de Pago</label>
+                                    <select class="form-control" name="metodo_pago" id="paymentMethod" onchange="mostrarDatosTransferencia()">
+                                        <option value="paypal">PayPal</option>
+                                        <option value="transferencia">Transferencia Bancaria</option>
+                                    </select>
+                                </div>
+            
+                                <div id="datosTransferencia" style="display: none;">
+                                    <table class="table mt-3">
+                                        <tr><td>Banco:</td><td>Banco Estado</td></tr>
+                                        <tr><td>RUT:</td><td>21.002.289-9</td></tr>
+                                        <tr><td>Nombre:</td><td>Exequiel Albornoz</td></tr>
+                                        <tr><td>Numero cuenta:</td><td>00021002289</td></tr>
+                                        <tr><td>Correo:</td><td>albornozexequiel01@gmail.com</td></tr>
+                                    </table>
+                                    <div class="form-group">
+                                        <label for="comprobante_pago">Subir comprobante:</label>
+                                        <input type="file" class="form-control" id="comprobante_pago" name="comprobante_pago" accept="image/*">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <a class="btn-lg py-3 btn-block" id="btnPaypal"></a>
+                                    <button type="submit" class="btn btn-sm btn-block btn-primary mt-3 text-uppercase" id="btnTransferencia" style="display:none;">Envíar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock contenido %}
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/tiny-slider.js' %}"></script>
+<script src="{% static 'core/js/custom.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{% static 'core/js/mensajes.js' %}"></script>
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+<script>
+    function mostrarDatosTransferencia() {
+        var metodoPago = document.getElementById('paymentMethod').value;
+        var datosTransferencia = document.getElementById('datosTransferencia');
+        var btnPaypal = document.getElementById('btnPaypal');
+        var btnTransferencia = document.getElementById('btnTransferencia');
+        
+        datosTransferencia.style.display = 'none';
+        btnPaypal.style.display = 'none';
+        btnTransferencia.style.display = 'none';
+
+        if (metodoPago === 'paypal') {
+            btnPaypal.style.display = 'block';
+        } else if (metodoPago === 'transferencia') {
+            datosTransferencia.style.display = 'block';
+            btnTransferencia.style.display = 'block';
+        }
+    }
+
+    function validarCampos() {
+        var tipo_entrega = $('input[name="tipo_entrega"]:checked').val();
+        var nombre = $('#id_nombre').val() ? $('#id_nombre').val() : $('#id_nombre_2').val();
+        var apellido = $('#id_apellido').val() ? $('#id_apellido').val() : $('#id_apellido_2').val();
+        var direccion = $('#id_direccion').val();
+        var region = $('#id_region').val();
+        var comuna = $('#id_comuna').val();
+        var correo = $('#id_correo').val() ? $('#id_correo').val() : $('#id_correo_2').val();
+        var run = $('#id_run').val();
+        var sucursal = $('input[name="sucursal"]:checked').val();
+
+        console.log("tipo_entrega "+ tipo_entrega);
+        console.log("nombre "+ nombre);
+        console.log("apellido "+ apellido);
+        console.log("direccion "+ direccion);
+        console.log("region "+ region);
+        console.log("comuna "+ comuna);
+        console.log("correo "+ correo);
+        console.log("run "+ run);
+        console.log("sucursal "+ sucursal);
+        if (!nombre || !apellido || !correo) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete todos los campos obligatorios.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return false;
+        }
+
+        if (tipo_entrega === 'envio_domicilio' && (!direccion || !region || !comuna)) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete todos los campos obligatorios para el envío a domicilio.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return false;
+
+        } if (tipo_entrega === 'retiro_tienda' && (!run || !sucursal )) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Por favor, complete todos los campos obligatorios para el retiro en tienda.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return false;
+        } 
+        
+        return true;
+
+
+    }
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    $(document).ready(function () {
+        $('#btnTransferencia').on('click', function (e) {
+            e.preventDefault();
+    
+            if (!validarCampos()) {
+                return;
+            }
+    
+            var csrftoken = getCookie('csrftoken');
+            var tipo_entrega = $('input[name="tipo_entrega"]:checked').val();
+            var nombre = $('#id_nombre').val() ? $('#id_nombre').val() : $('#id_nombre_2').val();
+            var apellido = $('#id_apellido').val() ? $('#id_apellido').val() : $('#id_apellido_2').val();
+            var direccion = $('#id_direccion').val();
+            var region = $('#id_region').val();
+            var comuna = $('#id_comuna').val();
+            var correo = $('#id_correo').val();
+            var run = $('#id_run').val();
+            var sucursal = $('input[name="sucursal"]:checked').val();
+            var comprobantePago = $('#comprobante_pago').prop('files')[0]; 
+    
+            // Validar comprobante de pago
+            if (!comprobantePago) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Debe introducir el comprobante de pago.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+    
+            var formData = new FormData();
+            formData.append('nombre', nombre);
+            formData.append('apellido', apellido);
+            formData.append('direccion', direccion);
+            formData.append('region', region);
+            formData.append('comuna', comuna);
+            formData.append('correo', correo);
+            formData.append('run', run);
+            if (sucursal) {
+                formData.append('sucursal', sucursal);
+            }
+            formData.append('tipo_entrega', tipo_entrega);
+            formData.append('comprobante_pago', comprobantePago);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+    
+            $.ajax({
+                type: 'POST',
+                url: '/crear_pedido/',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    Swal.fire({
+                        title: '¡EL PAGO SE REALIZÓ CON ÉXITO!',
+                        text: 'Su número de pedido es: ' + response.numero_pedido,
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ver Boleta'
+                    }).then(function () {
+                        window.location.href = '/boleta/' + response.numero_pedido;
+                    });
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.error('Error en la solicitud AJAX:', errorThrown);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Hubo un problema al procesar el pago. Por favor, revise todos los campos nuevamente.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        });
+    });
+
+    document.getElementById('paymentMethod').addEventListener('change', function() {
+        var paymentMethod = this.value;
+        var btnPaypal = document.getElementById('btnPaypal');
+        var btnTransferencia = document.getElementById('btnTransferencia');
+
+        btnPaypal.style.display = 'none';
+        btnTransferencia.style.display = 'none';
+
+        if (paymentMethod === 'paypal') {
+            btnPaypal.style.display = 'block';
+        } else if (paymentMethod === 'transferencia') {
+            btnTransferencia.style.display = 'block';
+        }
+    });
+</script>
+
+<script>
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    paypal.Button.render({
+        env: 'sandbox',
+        client: {
+            sandbox: 'AUdczilLjDrMGcZtY3F9Xqa4WAmOmJQki8I3sWy9rTnnuxmiPWNOW1RACinASsIaWMDt8QPAbg0JQ1EL',
+            production: 'demo_production_client_id'
+        },
+        locale: 'es_CL',
+        style: {
+            size: 'large',
+            color: 'black',
+            shape: 'pill'
+        },
+        commit: true,
+        payment: function (data, actions) {
+            if (!validarCampos()) {
+                return actions.reject();
+            }
+            return actions.payment.create({
+                transactions: [{
+                    amount: { 
+                        total: '{{ total_dolar }}', 
+                        currency: 'USD'
+                    }
+                }]
+            });
+        },
+        onAuthorize: function (data, actions) {
+            var csrftoken = getCookie('csrftoken');
+            return actions.payment.execute().then(function () {
+                var nombre = $('#id_nombre').val() ? $('#id_nombre').val() : $('#id_nombre_2').val();
+                var apellido = $('#id_apellido').val() ? $('#id_apellido').val() : $('#id_apellido_2').val();
+                var direccion = $('#id_direccion').val();
+                var region = $('#id_region').val();
+                var comuna = $('#id_comuna').val();
+                var correo = $('#id_correo').val();
+                var run = $('#id_run').val();
+                var sucursal = $('input[name="sucursal"]:checked').val();
+                var tipo_entrega = $('input[name="tipo_entrega"]:checked').val();
+                $.ajaxSetup({
+                    beforeSend: function(xhr, settings) {
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+                    }
+                });
+    
+                console.log("ANTES DE CREAR PEDIDO");
+    
+                $.ajax({
+                    type: 'POST',
+                    url: '/crear_pedido/',  
+                    data: {
+                        nombre: nombre,
+                        apellido: apellido,
+                        direccion: direccion,
+                        region: region,
+                        comuna: comuna,
+                        correo: correo,
+                        run: run,
+                        sucursal: sucursal, 
+                        tipo_entrega: tipo_entrega,
+                        csrfmiddlewaretoken: csrftoken
+                    },
+                    success: function (response) {
+                        console.log("ENTRANDO A CREAR PEDIDO");
+                        Swal.fire({
+                            title: '¡EL PAGO SE REALIZÓ CON ÉXITO!',
+                            text: 'Su número de pedido es: ' + response.numero_pedido,
+                            icon: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Ver Boleta'
+                        }).then(function () {
+                            // Redirigir a la página de la orden creada
+                            window.location.href = '/boleta/' + response.numero_pedido;
+                        });
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // Error en la solicitud AJAX
+                        console.error(errorThrown)
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'ERROR EN LA SOLICITUD!',
+                            icon: 'error',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Confirmar'
+                        });
+                    }
+                });
+            });
+        },
+        onCancel: function (data) {
+            Swal.fire({
+                title: '¡CANCELADO!',
+                text: 'Transacción cancelada!',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirmar'
+            });
+        },
+        onError: function (err) {
+            console.error(err)
+            Swal.fire({
+                title: 'Error',
+                text: 'Ha ocurrido un error con el pago',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirmar'
+            });
+        }
+    }, '#btnPaypal');    
+</script>
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const envioDomicilioRadio = document.getElementById("envio_domicilio");
+        const retiroTiendaRadio = document.getElementById("retiro_tienda");
+        const formEnvio = document.getElementById("form_envio");
+        const listaSucursales = document.getElementById("lista_sucursales");
+
+        function toggleFormulario() {
+            console.log("Cambio de opción de entrega detectado");
+            if (envioDomicilioRadio.checked) {
+                formEnvio.style.display = "block";
+                listaSucursales.style.display = "none";
+            } else if (retiroTiendaRadio.checked) {
+                formEnvio.style.display = "none";
+                listaSucursales.style.display = "block";
+            }
+        };
+
+        // Agregar evento onchange para los radios
+        envioDomicilioRadio.addEventListener("change", toggleFormulario);
+        retiroTiendaRadio.addEventListener("change", toggleFormulario);
+
+    });
+
+</script>
+{% endblock js %}

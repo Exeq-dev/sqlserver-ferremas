@@ -1,0 +1,95 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block contenido %}
+
+		<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>SERVICIOS</h1>
+								<p><a href="{% url 'shop' %}" class="btn btn-secondary me-2 text-white">Ir a la tienda</a></p>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="hero-img-wrap">
+								<img src="{% static 'core/images/material-hero.png' %}" class="img-fluid">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+
+		
+
+<!-- Start Why Choose Us Section -->
+<div class="why-choose-section">
+	<div class="container">
+		
+		
+		<div class="row my-5">
+			<div class="col-6 col-md-6 col-lg-3 mb-4">
+				<div class="feature">
+					<div class="icon">
+						<img src="{% static 'core/images/truck.svg' %}" alt="Image" class="imf-fluid">
+					</div>
+					<h3>Envío rápido &amp; gratuito</h3>
+					<p>Obtén tus productos de forma rápida y sin costo adicional. Nos aseguramos de que tu pedido llegue a tiempo.</p>
+				</div>
+			</div>
+
+			<div class="col-6 col-md-6 col-lg-3 mb-4">
+				<div class="feature">
+					<div class="icon">
+						<img src="{% static 'core/images/bag.svg' %}" alt="Image" class="imf-fluid">
+					</div>
+					<h3>Proceso de compra sencillo</h3>
+					<p>Nuestro proceso de compra está diseñado para ser intuitivo y sin complicaciones, para que puedas hacer tus pedidos fácilmente.</p>
+				</div>
+			</div>
+
+			<div class="col-6 col-md-6 col-lg-3 mb-4">
+				<div class="feature">
+					<div class="icon">
+						<img src="{% static 'core/images/support.svg' %}" alt="Image" class="imf-fluid">
+					</div>
+					<h3>Soporte 24/7</h3>
+					<p>Nuestro equipo de soporte está disponible las 24 horas del día, los 7 días de la semana, para ayudarte con cualquier pregunta o problema que puedas tener.</p>
+				</div>
+			</div>
+
+			<div class="col-6 col-md-6 col-lg-3 mb-4">
+				<div class="feature">
+					<div class="icon">
+						<img src="{% static 'core/images/return.svg' %}" alt="Image" class="imf-fluid">
+					</div>
+					<h3>Política de devoluciones sin complicaciones</h3>
+					<p>Ofrecemos reembolsos fáciles y sin problemas si no estás completamente satisfecho con tu compra. Tu satisfacción es nuestra prioridad.</p>
+				</div>
+			</div>
+		</div>			
+	</div>
+</div>
+<!-- End Why Choose Us Section -->
+
+		<!-- Start Product Section -->
+		<div class="product-section pt-0">
+			<div class="container">
+				<div class="row">
+
+					<!-- Start Column 1 -->
+					<div class="col-md-12 col-lg-6 mb-5 mb-lg-0 align-items-center">
+						<h2 class="mb-4 section-title">Materiales y herramientas de excelente calidad.</h2>
+						<p class="mb-4">¡Contamos con gran variedad de productos!</p>
+						<p><a href="{% url 'shop' %}" class="btn">Explorar</a></p>
+					</div> 
+					<!-- End Column 1 -->
+
+				</div>
+			</div>
+		</div>
+		<!-- End Product Section -->
+
+{% endblock contenido %}
