@@ -48,7 +48,7 @@
             <ul class="dropdown-menu bg-black" aria-labelledby="navbarDropdown">
               {% if user.is_authenticated %}
                 	<li><a class="dropdown-item text-white" href="{% url 'perfil_usuario' %}"><i class="fa-solid fa-user"></i> {{ user.pnombre }} {{ user.ap_paterno }}</a></li>
-					{% if user.idRol_id != 1 and user.idRol_id != 3 %}
+					{% if user.idRol_id != 4 %}
                 	<li><a class="dropdown-item text-white" href="{% url 'panel_administracion' %}"><i class="fa-solid fa-lock"></i> Administración</a></li>
                 {% endif %}
 				<li><a class="dropdown-item text-white" href="{% url 'mis_pedidos' %}"><i class="fa-solid fa-store"></i> Mis pedidos</a></li>

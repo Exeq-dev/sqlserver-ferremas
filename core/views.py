@@ -34,14 +34,6 @@ class RolUsuarioViewSet(viewsets.ModelViewSet):
     queryset = rolUsuario.objects.all()
     serializer_class = RolUsuarioSerializer
 
-class RegionViewSet(viewsets.ModelViewSet):
-    queryset = region.objects.all()
-    serializer_class = RegionSerializer
-
-class ComunaViewSet(viewsets.ModelViewSet):
-    queryset = comuna.objects.all()
-    serializer_class = ComunaSerializer
-
 class UsuarioCustomViewSet(viewsets.ModelViewSet):
     queryset = usuarioCustom.objects.all()
     serializer_class = UsuarioCustomSerializer
@@ -160,8 +152,6 @@ def cart(request):
 @login_required
 def checkout(request):
     try:
-        regiones = region.objects.all()  
-        comunas = comuna.objects.all()
         usuario = request.user
         carrito = Carrito.objects.get(usuario=usuario)
         items = carrito.itemcarrito_set.all()
@@ -189,8 +179,6 @@ def checkout(request):
                     carrito=carrito,
                     tipo_entrega=form.cleaned_data['tipo_entrega'],
                     direccion=form.cleaned_data['direccion'],
-                    region=form.cleaned_data['region'],
-                    comuna=form.cleaned_data['comuna'],
                     nombre=form.cleaned_data['nombre'],
                     apellido=form.cleaned_data['apellido'],
                     run=form.cleaned_data['run'],
@@ -214,8 +202,6 @@ def checkout(request):
             'total': total,
             'subtotal_dolar': subtotal_dolar_str,
             'total_dolar': total_dolar_str,
-            'regiones': regiones,
-            'comunas': comunas,
             'sucursales': sucursales,
             'MEDIA_URL': settings.MEDIA_URL,
             'form': form,
@@ -238,7 +224,6 @@ def register(request):
             user = form.save(commit=False)
             # Asignar el rol por defecto Cliente
             user.idRol = rolUsuario.objects.get(nombreRol='Cliente')
-            user.idComuna = form.cleaned_data['comuna']
             
             # Guardar el correo_usuario en el campo email predeterminado
             user.email = user.correo_usuario
@@ -393,7 +378,7 @@ def modificar_usuario(request, p_id):
     return render(request, 'core/modificar_usuario.html', {'form': form})
 
 
-def post_usuario(p_username, p_run, p_pnombre, p_ap_paterno, p_correo_usuario, p_fecha_nacimiento, p_direccion, p_idComuna, p_idRol, p_password):
+def post_usuario(p_username, p_run, p_pnombre, p_ap_paterno, p_correo_usuario, p_fecha_nacimiento, p_direccion, p_idRol, p_password):
     try:
         password_encrypted = make_password(p_password)
         usuarioCustom.objects.create(
@@ -404,7 +389,6 @@ def post_usuario(p_username, p_run, p_pnombre, p_ap_paterno, p_correo_usuario, p
             correo_usuario=p_correo_usuario,
             fecha_nacimiento=p_fecha_nacimiento,
             direccion=p_direccion,
-            idComuna_id=p_idComuna,
             idRol_id=p_idRol,
             password=password_encrypted
         )
@@ -425,7 +409,6 @@ def add_user(request):
             p_correo_usuario = form.cleaned_data['correo_usuario']
             p_fecha_nacimiento = form.cleaned_data['fecha_nacimiento']
             p_direccion = form.cleaned_data['direccion']
-            p_idComuna = form.cleaned_data['idComuna'].pk
             p_idRol = form.cleaned_data['idRol'].pk
             p_password = form.cleaned_data['password1']
 
@@ -437,7 +420,6 @@ def add_user(request):
                 p_correo_usuario,
                 p_fecha_nacimiento,
                 p_direccion,
-                p_idComuna,
                 p_idRol,
                 p_password
             )
@@ -519,8 +501,6 @@ def crear_pedido(request):
             comuna_id = request.POST.get('comuna')
             correo = request.POST.get('correo')
 
-            region_obj = region.objects.filter(idRegion=region_id).first() if region_id else None
-            comuna_obj = comuna.objects.filter(idComuna=comuna_id).first() if comuna_id else None
 
             pedido = Pedido.objects.create(
                 carrito=carrito,
@@ -528,8 +508,6 @@ def crear_pedido(request):
                 nombre=nombre,
                 apellido=apellido,
                 direccion=direccion,
-                region=region_obj,
-                comuna=comuna_obj,
                 correo=correo,
                 run=None,
                 sucursal=sucursal_instance,

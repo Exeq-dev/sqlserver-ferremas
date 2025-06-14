@@ -6,16 +6,6 @@ class RolUsuarioSerializer(serializers.ModelSerializer):
         model = rolUsuario
         fields = '__all__'
 
-class RegionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = region
-        fields = '__all__'
-
-class ComunaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = comuna
-        fields = '__all__'
-
 class UsuarioCustomSerializer(serializers.ModelSerializer):
     class Meta:
         model = usuarioCustom

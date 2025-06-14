@@ -10,8 +10,7 @@ class UsuarioAdmin(admin.ModelAdmin):
 
 admin.site.register(usuarioCustom, UsuarioAdmin)
 admin.site.register(rolUsuario)
-admin.site.register(comuna)
-admin.site.register(region)
+
 admin.site.register(producto)
 admin.site.register(marca)
 admin.site.register(categoriaProducto)

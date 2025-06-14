@@ -8,8 +8,6 @@ from rest_framework import routers
 # CREAMOS LAS RUTAS PARA LA API
 router = routers.DefaultRouter()
 router.register(r'roles', RolUsuarioViewSet)
-router.register(r'regiones', RegionViewSet)
-router.register(r'comunas', ComunaViewSet)
 router.register(r'usuarios', UsuarioCustomViewSet)
 router.register(r'marcas', MarcaViewSet)
 router.register(r'categorias', CategoriaProductoViewSet)

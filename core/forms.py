@@ -7,24 +7,23 @@ from django.core.exceptions import ValidationError
 import re
 
 class UsuarioForm(forms.ModelForm):
-    username = forms.CharField(label='Nombre de usuario', help_text='Mínimo 6 caracteres')
+    username = forms.CharField(label='Nombre de usuario', help_text='Mínimo 3 caracteres')
     run = forms.CharField(label='RUN (Rol Único Nacional)', help_text='Ejemplo: 12345678-9')
     pnombre = forms.CharField(label='Primer Nombre')
     ap_paterno = forms.CharField(label='Apellido Paterno')
     correo_usuario = forms.EmailField(label='Correo electrónico')
     fecha_nacimiento = forms.DateField(label='Fecha de Nacimiento')
     direccion = forms.CharField(label='Dirección', widget=forms.TextInput(attrs={'placeholder': 'Calle, número, comuna'}))
-    idComuna = forms.ModelChoiceField(queryset=comuna.objects.all(), label='Comuna')
     idRol = forms.ModelChoiceField(queryset=rolUsuario.objects.all(), label='Rol')
 
     class Meta:
         model = usuarioCustom
-        fields = ['username', 'run', 'pnombre', 'ap_paterno', 'correo_usuario', 'fecha_nacimiento', 'direccion', 'idComuna', 'idRol']
+        fields = ['username', 'run', 'pnombre', 'ap_paterno', 'correo_usuario', 'fecha_nacimiento', 'direccion', 'idRol']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        if len(username) < 6:
-            raise ValidationError('El nombre de usuario debe tener al menos 6 caracteres.')
+        if len(username) < 3:
+            raise ValidationError('El nombre de usuario debe tener al menos 3 caracteres.')
         return username
 
     def clean_run(self):
@@ -34,26 +33,25 @@ class UsuarioForm(forms.ModelForm):
         return run
 
 class RegisterUserAdminForm(UserCreationForm):
-    username = forms.CharField(label='Nombre de usuario', help_text='Mínimo 6 caracteres')
+    username = forms.CharField(label='Nombre de usuario', help_text='Mínimo 3 caracteres')
     run = forms.CharField(label='RUN (Rol Único Nacional)', help_text='Ejemplo: 12345678-9')
     pnombre = forms.CharField(label='Primer Nombre')
     ap_paterno = forms.CharField(label='Apellido Paterno')
     correo_usuario = forms.EmailField(label='Correo electrónico')
     fecha_nacimiento = forms.DateField(label='Fecha de Nacimiento')
     direccion = forms.CharField(label='Dirección', widget=forms.TextInput(attrs={'placeholder': 'Calle, número, comuna'}))
-    idComuna = forms.ModelChoiceField(queryset=comuna.objects.all(), label='Comuna')
     idRol = forms.ModelChoiceField(queryset=rolUsuario.objects.all(), label='Rol')
     password1 = forms.CharField(label='Contraseña', widget=forms.PasswordInput, help_text='Mínimo 8 caracteres')
     password2 = forms.CharField(label='Confirmar Contraseña', widget=forms.PasswordInput, help_text='Repite la contraseña para confirmar')
 
     class Meta:
         model = usuarioCustom
-        fields = ['username', 'run', 'pnombre', 'ap_paterno', 'correo_usuario', 'fecha_nacimiento', 'direccion', 'idComuna', 'idRol', 'password1', 'password2']
+        fields = ['username', 'run', 'pnombre', 'ap_paterno', 'correo_usuario', 'fecha_nacimiento', 'direccion', 'idRol', 'password1', 'password2']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        if len(username) < 6:
-            raise ValidationError('El nombre de usuario debe tener al menos 6 caracteres.')
+        if len(username) < 3:
+            raise ValidationError('El nombre de usuario debe tener al menos 3 caracteres.')
         return username
 
     def clean_run(self):
@@ -70,22 +68,21 @@ class RegisterUserAdminForm(UserCreationForm):
         return password2
 
 class RegisterForm(UserCreationForm):
-    username = forms.CharField(label='Nombre de usuario', help_text='Mínimo 6 caracteres')
+    username = forms.CharField(label='Nombre de usuario', help_text='Mínimo 3 caracteres')
     run = forms.CharField(label='RUN (Rol Único Nacional)', help_text='Ejemplo: 12345678-9')
     pnombre = forms.CharField(label='Primer Nombre')
     ap_paterno = forms.CharField(label='Apellido Paterno')
     fecha_nacimiento = forms.DateField(label='Fecha de Nacimiento', widget=forms.DateInput(attrs={'type': 'date'}))
     direccion = forms.CharField(label='Dirección', widget=forms.TextInput(attrs={'placeholder': 'Calle, número, comuna'}))
-    comuna = forms.ModelChoiceField(queryset=comuna.objects.all(), label='Comuna')
 
     class Meta:
         model = usuarioCustom
-        fields = ['username', 'run', 'correo_usuario', 'pnombre', 'ap_paterno', 'fecha_nacimiento', 'direccion', 'comuna']
+        fields = ['username', 'run', 'correo_usuario', 'pnombre', 'ap_paterno', 'fecha_nacimiento', 'direccion']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        if len(username) < 6:
-            raise ValidationError('El nombre de usuario debe tener al menos 6 caracteres.')
+        if len(username) < 3:
+            raise ValidationError('El nombre de usuario debe tener al menos 3 caracteres.')
         return username
 
     def clean_run(self):
@@ -188,8 +185,6 @@ class EnvioDomicilioForm(forms.Form):
     nombre = forms.CharField(max_length=100, required=True)
     apellido = forms.CharField(max_length=100, required=True)
     direccion = forms.CharField(max_length=255, required=True)
-    region = forms.ModelChoiceField(queryset=region.objects.all(), required=True)
-    comuna = forms.ModelChoiceField(queryset=comuna.objects.all(), required=True)
     correo = forms.EmailField()
 
     def clean_nombre(self):
@@ -230,7 +225,7 @@ class RetiroTiendaForm(forms.Form):
 class UsuarioCustomForm(forms.ModelForm):
     class Meta:
         model = usuarioCustom
-        fields = ['username', 'run', 'pnombre', 'ap_paterno', 'correo_usuario', 'fecha_nacimiento', 'direccion', 'idComuna']
+        fields = ['username', 'run', 'pnombre', 'ap_paterno', 'correo_usuario', 'fecha_nacimiento', 'direccion']
         labels = {
             'username': 'Nombre de usuario',
             'run': 'Run',
@@ -239,7 +234,6 @@ class UsuarioCustomForm(forms.ModelForm):
             'correo_usuario': 'Correo',
             'fecha_nacimiento': 'Fecha Nacimiento',
             'direccion': 'Dirección',
-            'idComuna': 'Comuna',
         }
 
     def clean_username(self):
@@ -260,7 +254,7 @@ class CheckoutForm(forms.ModelForm):
 
     class Meta:
         model = Pedido
-        fields = ['tipo_entrega', 'direccion', 'region', 'comuna', 'nombre', 'apellido', 'run', 'correo', 'sucursal', 'metodo_pago', 'comprobante_pago']
+        fields = ['tipo_entrega', 'direccion', 'nombre', 'apellido', 'run', 'correo', 'sucursal', 'metodo_pago', 'comprobante_pago']
 
     def clean(self):
         cleaned_data = super().clean()

@@ -10,21 +10,6 @@ class rolUsuario(models.Model):
     def __str__(self):
         return self.nombreRol
 
-class region(models.Model):
-    idRegion = models.AutoField(primary_key=True)
-    nombreRegion = models.CharField(max_length=80, blank=False, null=False)
-
-    def __str__(self):
-        return self.nombreRegion
-
-class comuna(models.Model):
-    idComuna = models.AutoField(primary_key=True)
-    nombreComuna = models.CharField(max_length=80, blank=False, null=False)
-    idRegion = models.ForeignKey(region, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.nombreComuna
-
 class usuarioCustom(AbstractUser):
     run = models.CharField(max_length=12, blank=False, null=False)
     pnombre = models.CharField(max_length=20, blank=False, null=False)
@@ -34,7 +19,6 @@ class usuarioCustom(AbstractUser):
     correo_usuario = models.EmailField(blank=False, null=False)
     fecha_nacimiento = models.DateField(null=True, blank=True)
     direccion = models.CharField(blank=False, null=False, max_length=100)
-    idComuna = models.ForeignKey(comuna, on_delete=models.CASCADE, blank=True, null=True)
     idRol = models.ForeignKey(rolUsuario, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
@@ -77,7 +61,6 @@ class sucursal(models.Model):
     idSucursal = models.AutoField(primary_key=True)
     nombreSucursal = models.CharField(max_length=50, blank=False, null=False)
     direccionSucursal = models.CharField(max_length=60, blank=False, null=False)
-    idComuna = models.ForeignKey(comuna, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nombreSucursal
@@ -121,8 +104,6 @@ class Pedido(models.Model):
     estado = models.ForeignKey(Seguimiento, on_delete=models.CASCADE, default=1)
     productos = models.ManyToManyField(producto, through='ItemPedido')
     direccion = models.CharField(max_length=200, blank=True, null=True)
-    region = models.ForeignKey(region, on_delete=models.CASCADE, blank=True, null=True)
-    comuna = models.ForeignKey(comuna, on_delete=models.CASCADE, blank=True, null=True)
     nombre = models.CharField(max_length=20, blank=True, null=True)
     apellido = models.CharField(max_length=24, blank=True, null=True)
     run = models.CharField(max_length=12, blank=True, null=True)
