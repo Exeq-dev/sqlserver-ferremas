@@ -27,11 +27,11 @@
                     <p class="text-muted">{{ producto.descripcionProducto }}</p>
                     <div class="mt-4">
                         <p class="h5 text-uppercase">Precio: <span class="badge bg-warning">${{ producto.precioProducto }} / ${{ precio_dolares }}</span></p>
-                        <p class="h5 text-uppercase">Stock: <span class="badge bg-warning">{{ producto.stockProducto }}</span></p>
+                        <p class="h5 text-uppercase">Stock: <span class="badge bg-warning">{{ stock_actual }}</span></p>
                         <p class="h5 text-uppercase">Marca: <span class="badge bg-warning">{{ producto.idMarca }}</span></p>
                         <p class="h5 text-uppercase">Categoria: <span class="badge bg-warning">{{ producto.idcategoriaProducto }}</span></p>
                         <div class="mt-5 text-center">
-                            {% if producto.stockProducto > 0 %}
+                            {% if stock_actual > 0 %}
                                 <a href="{% url 'agregar_al_carrito' producto.idProducto %}" class="btn btn-warning text-white font-weight-bold rounded-pill">Añadir al Carrito</a>
                             {% else %}
                                 <button class="btn btn-dark text-white font-weight-bold rounded-pill" disabled>Añadir al Carrito</button>

@@ -41,6 +41,10 @@ urlpatterns = [
 
     #PANEL DE ADMINISTRACIÓN (ROL ADMINISTRADOR):
     path('panel_administracion/', panel_administracion, name='panel_administracion'),
+    path('mas_vendidos/', productos_mas_vendidos, name='mas_vendidos'),
+    path('productos-mas-vendidos/excel/', generar_excel_mas_vendidos, name='excel_mas_vendidos'),
+
+
 
     #GESTIÓN DE USUARIOS
     path('gestion_usuarios/', gestion_usuarios, name='gestion_usuarios'),

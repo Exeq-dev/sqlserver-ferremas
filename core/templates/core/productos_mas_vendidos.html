@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block contenido %}
+<!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Productos Más Vendidos</h1>
+                </div>
+            </div>
+            <div class="col-lg-7">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<!-- Tabla de Productos Más Vendidos -->
+<!-- Tabla de Productos Más Vendidos -->
+<div class="untree_co-section product-section before-footer-section">
+    <div class="container">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center align-middle">
+                <thead style="background-color:rgb(223, 206, 61);"> <!-- Amarillo claro estilo Excel -->
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre del Producto</th>
+                        <th>Vendidos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                    <tr>
+                        <td>{{ producto.id }}</td>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.vendidos }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Botón de Excel bien posicionado -->
+        <div class="text-center mt-4 mb-5">
+            <a href="{% url 'excel_mas_vendidos' %}" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Descargar Excel
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock contenido %}

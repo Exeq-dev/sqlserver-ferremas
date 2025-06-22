@@ -81,19 +81,40 @@ def index(request):
 
 @login_required
 def shop(request):
+    categoria_id = request.GET.get('categoria')
     
-    productos = lista_productos()
-    paginator = Paginator(productos, 4)
+    # Filtro dinámico
+    if categoria_id:
+        productos = producto.objects.filter(idcategoriaProducto_id=categoria_id).order_by('nombreProducto')
+    else:
+        productos = producto.objects.all().order_by('nombreProducto')
 
+    paginator = Paginator(productos, 8)
     page = request.GET.get('page', 1)
     productos = paginator.get_page(page)
-    
-    data = {
+
+    # Obtener todas las categorías con cantidad de productos usando la función SQL
+    categorias = categoriaProducto.objects.all()
+    categorias_con_conteo = []
+
+    for c in categorias:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT dbo.fn_cantidad_productos_por_categoria(%s)", [c.idcategoriaProducto])
+            cantidad = cursor.fetchone()[0]
+
+        categorias_con_conteo.append({
+            'id': c.idcategoriaProducto,
+            'nombre': c.nombrecategoriaProducto,
+            'cantidad': cantidad
+        })
+
+    return render(request, 'core/shop.html', {
         'listado': productos,
         'MEDIA_URL': settings.MEDIA_URL,
+        'categorias': categorias_con_conteo,
+        'categoria_actual': int(categoria_id) if categoria_id else None,
         'paginator': paginator
-    }
-    return render(request, 'core/shop.html', data)
+    })
 
 def about(request):
 	return render(request, 'core/about.html')
@@ -281,16 +302,23 @@ def lista_productos():
 # DETALLE DE PRODUCTO
 def detalle_producto(request, idProducto):
     producto_instance = producto.objects.get(idProducto=idProducto)
+
+    # Obtener precio en dólares
     api_mindicador = requests.get('https://mindicador.cl/api/')
     divisas = api_mindicador.json()
     tasa_dolar = divisas['dolar']['valor']
-
     precio_dolares = round(producto_instance.precioProducto / tasa_dolar, 2)
+
+    # Obtener stock actual desde función SQL
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT dbo.fn_obtener_stock(%s)", [idProducto])
+        stock_actual = cursor.fetchone()[0]
 
     data = {
         'producto': producto_instance,
         'MEDIA_URL': settings.MEDIA_URL,
         'precio_dolares': precio_dolares,
+        'stock_actual': stock_actual,
     }
     return render(request, 'core/detalle_producto.html', data)
 
@@ -431,6 +459,62 @@ def add_user(request):
     return render(request, 'core/addusuario.html', {'form': form})
 
 
+from django.db import connection
+
+def productos_mas_vendidos(request):
+    with connection.cursor() as cursor:
+        cursor.execute("EXEC sp_listar_productos_mas_vendidos")
+        rows = cursor.fetchall()
+
+    productos = []
+    for row in rows:
+        productos.append({
+            'id': row[0],
+            'nombre': row[1],
+            'vendidos': row[2],
+        })
+
+    return render(request, 'core/productos_mas_vendidos.html', {'productos': productos})
+
+def generar_excel_mas_vendidos(request):
+    # Ejecutar el procedimiento almacenado
+    with connection.cursor() as cursor:
+        cursor.execute("EXEC sp_listar_productos_mas_vendidos")
+        rows = cursor.fetchall()
+
+    # Crear Excel
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Más Vendidos"
+
+    # Encabezados
+    headers = ['ID Producto', 'Nombre', 'Vendidos']
+    header_font = Font(bold=True, color="000000")
+    header_fill = PatternFill(start_color="FFF176", end_color="FFF176", fill_type="solid")
+
+    ws.append(headers)
+    for col in ws.iter_cols(min_row=1, max_row=1, min_col=1, max_col=len(headers)):
+        for cell in col:
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = Alignment(horizontal="center")
+
+    # Datos
+    for row in rows:
+        ws.append([row[0], row[1], row[2]])
+
+    # Ajustar anchos
+    ws.column_dimensions['A'].width = 15
+    ws.column_dimensions['B'].width = 40
+    ws.column_dimensions['C'].width = 15
+
+    # Exportar
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=productos_mas_vendidos.xlsx'
+    wb.save(response)
+    return response
+
+
 
 # CARRITO DE COMPRAS
 
@@ -544,14 +628,40 @@ def boleta(request, numero_pedido):
 # MIS PEDIDOS
 @login_required
 def mis_pedidos(request):
-    usuario = request.user
-    pedidos = Pedido.objects.filter(carrito__usuario=usuario)
+    usuario_id = request.user.id
+    pedidos = []
 
-    data = {
+    # Ejecutar SP para listar pedidos del usuario
+    with connection.cursor() as cursor:
+        cursor.execute("EXEC sp_listar_pedidos_por_usuario @idUsuario = %s", [usuario_id])
+        rows = cursor.fetchall()
+
+    for row in rows:
+        pedido_id = row[0]
+
+        with connection.cursor() as cursor2:
+            cursor2.execute("SELECT dbo.fn_calcular_total_pedido(%s)", [pedido_id])
+            total = cursor2.fetchone()[0]
+        try:
+            pedido_obj = Pedido.objects.get(id=pedido_id)
+        except Pedido.DoesNotExist:
+            pedido_obj = None
+
+        pedidos.append({
+            'id': pedido_id,
+            'numero': row[1],
+            'fecha': row[2],
+            'tipo_entrega': row[3],
+            'sucursal': row[4],
+            'estado': row[5],
+            'total': total,
+            'pedido_obj': pedido_obj,  
+        })
+
+    return render(request, 'core/mis_pedidos.html', {
         'pedidos': pedidos,
         'MEDIA_URL': settings.MEDIA_URL,
-    }
-    return render(request, 'core/mis_pedidos.html', data)
+    })
 
 
 # ADMINISTRACIÓN DE PEDIDOS
