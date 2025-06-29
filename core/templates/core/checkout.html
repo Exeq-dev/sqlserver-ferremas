@@ -54,26 +54,6 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6">
-                                <label for="id_region" class="text-black">Región <span class="text-danger">*</span></label>
-                                <select class="form-control" id="id_region" name="region" required>
-                                    <option value="">Seleccionar región</option>
-                                    {% for region in regiones %}
-                                    <option value="{{ region.idRegion }}">{{ region.nombreRegion }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="id_comuna" class="text-black">Comuna <span class="text-danger">*</span></label>
-                                <select class="form-control" id="id_comuna" name="comuna" required>
-                                    <option value="">Seleccionar comuna</option>
-                                    {% for comuna in comunas %}
-                                    <option value="{{ comuna.idComuna }}">{{ comuna.nombreComuna }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <div class="col-md-12">
                                 <label for="id_correo" class="text-black">Correo electrónico <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="id_correo" name="correo" required>
@@ -238,8 +218,6 @@
         var nombre = $('#id_nombre').val() ? $('#id_nombre').val() : $('#id_nombre_2').val();
         var apellido = $('#id_apellido').val() ? $('#id_apellido').val() : $('#id_apellido_2').val();
         var direccion = $('#id_direccion').val();
-        var region = $('#id_region').val();
-        var comuna = $('#id_comuna').val();
         var correo = $('#id_correo').val() ? $('#id_correo').val() : $('#id_correo_2').val();
         var run = $('#id_run').val();
         var sucursal = $('input[name="sucursal"]:checked').val();
@@ -248,8 +226,6 @@
         console.log("nombre "+ nombre);
         console.log("apellido "+ apellido);
         console.log("direccion "+ direccion);
-        console.log("region "+ region);
-        console.log("comuna "+ comuna);
         console.log("correo "+ correo);
         console.log("run "+ run);
         console.log("sucursal "+ sucursal);
@@ -263,7 +239,7 @@
             return false;
         }
 
-        if (tipo_entrega === 'envio_domicilio' && (!direccion || !region || !comuna)) {
+        if (tipo_entrega === 'envio_domicilio' && (!direccion)) {
             Swal.fire({
                 title: 'Error',
                 text: 'Por favor, complete todos los campos obligatorios para el envío a domicilio.',
@@ -315,8 +291,6 @@
             var nombre = $('#id_nombre').val() ? $('#id_nombre').val() : $('#id_nombre_2').val();
             var apellido = $('#id_apellido').val() ? $('#id_apellido').val() : $('#id_apellido_2').val();
             var direccion = $('#id_direccion').val();
-            var region = $('#id_region').val();
-            var comuna = $('#id_comuna').val();
             var correo = $('#id_correo').val();
             var run = $('#id_run').val();
             var sucursal = $('input[name="sucursal"]:checked').val();
@@ -337,8 +311,6 @@
             formData.append('nombre', nombre);
             formData.append('apellido', apellido);
             formData.append('direccion', direccion);
-            formData.append('region', region);
-            formData.append('comuna', comuna);
             formData.append('correo', correo);
             formData.append('run', run);
             if (sucursal) {
@@ -445,8 +417,6 @@
                 var nombre = $('#id_nombre').val() ? $('#id_nombre').val() : $('#id_nombre_2').val();
                 var apellido = $('#id_apellido').val() ? $('#id_apellido').val() : $('#id_apellido_2').val();
                 var direccion = $('#id_direccion').val();
-                var region = $('#id_region').val();
-                var comuna = $('#id_comuna').val();
                 var correo = $('#id_correo').val();
                 var run = $('#id_run').val();
                 var sucursal = $('input[name="sucursal"]:checked').val();
@@ -466,8 +436,6 @@
                         nombre: nombre,
                         apellido: apellido,
                         direccion: direccion,
-                        region: region,
-                        comuna: comuna,
                         correo: correo,
                         run: run,
                         sucursal: sucursal, 

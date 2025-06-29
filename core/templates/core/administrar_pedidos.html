@@ -30,8 +30,6 @@
                             <th scope="col">Fecha</th>
                             <th scope="col">Cliente</th>
                             <th scope="col">Dirección</th>
-                            <th scope="col">Comuna</th>
-                            <th scope="col">Región</th>
                             <th scope="col">RUN</th>
                             <th scope="col">Tipo de Entrega</th>
                             <th scope="col">Comprobante de pago</th>
@@ -46,8 +44,6 @@
                                 <td>{{ pedido.fecha|date:"d/m/Y" }}</td>
                                 <td class="cliente">{{ pedido.nombre|default:"N/A"}} {{ pedido.apellido|default:"N/A"}}</td>
                                 <td class="direccion">{{ pedido.direccion|default:"N/A"}}</td>
-                                <td>{{ pedido.comuna.nombreComuna|default:"N/A"}}</td>
-                                <td>{{ pedido.region.nombreRegion|default:"N/A"}}</td>
                                 <td>{{ pedido.run|default:"N/A"}}</td>
                                 <td>{{ pedido.get_tipo_entrega_display|default:"N/A"}}</td>
                                 <td>
@@ -58,7 +54,7 @@
                                     {% endif %}
                                 </td>
                                 <td>{{ pedido.estado }}</td>
-                                {% if user.idRol_id == 5 or user.idRol_id == 2 %}
+                                {% if user.idRol_id == 1 or user.idRol_id == 2 %}
                                     <td>
                                         {% if pedido.estado.id != 4 %}
                                             <form id="form-{{ pedido.numero }}" method="post" action="{% url 'cambiar_estado' pedido.numero %}">
@@ -83,6 +79,7 @@
         </div>
     </div>
 </div>
+<br><br><br>
 {% endblock contenido %}
 
 {% block js %}
